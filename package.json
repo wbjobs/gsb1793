@@ -1,0 +1,11 @@
+{
+  "name": "chunked-downloader",
+  "version": "1.0.0",
+  "description": "并发分块下载器：Range 分块 / 暂停恢复 / 限速 / 断点续传 / 异常重试 (Fetch + Streams + IndexedDB + Web Worker)",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/rate-limiter.test.mjs test/fetcher.test.mjs test/engine.test.mjs",
+    "test:big": "BIG_FILE=1 node --test test/engine.test.mjs",
+    "start": "python3 -m http.server 8080"
+  }
+}

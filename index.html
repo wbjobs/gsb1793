@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>并发分块下载器</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>并发分块下载器</h1>
+    <span class="subtitle">Fetch + Streams + IndexedDB + Web Worker</span>
+  </header>
+
+  <main class="layout">
+    <section class="card add-card">
+      <label for="urls">下载地址（每行一个，支持多文件并发）</label>
+      <textarea id="urls" rows="3" placeholder="https://example.com/large-file.zip&#10;https://example.com/another.iso"></textarea>
+      <div class="row">
+        <button id="btn-add" class="primary">添加并开始</button>
+        <button id="btn-add-paused">仅添加（暂停态）</button>
+      </div>
+    </section>
+
+    <section class="card controls-card">
+      <div class="control">
+        <label for="concurrency">并发数</label>
+        <input id="concurrency" type="range" min="1" max="12" value="3" />
+        <span id="concurrency-value" class="control-value">3</span>
+      </div>
+      <div class="control">
+        <label for="rate">限速</label>
+        <select id="rate">
+          <option value="0">不限速</option>
+          <option value="262144">256 KB/s</option>
+          <option value="524288">512 KB/s</option>
+          <option value="1048576">1 MB/s</option>
+          <option value="5242880">5 MB/s</option>
+          <option value="10485760">10 MB/s</option>
+        </select>
+      </div>
+      <div class="hint">
+        下载分块保存在 IndexedDB（每块 8MB），完成后点“保存到磁盘”导出；
+        断网、关闭页面后重新打开仍可继续。
+      </div>
+    </section>
+
+    <section class="card list-card">
+      <h2>任务列表</h2>
+      <div id="file-list" class="file-list"></div>
+      <div id="empty-tip" class="empty-tip">暂无下载任务</div>
+    </section>
+
+    <section class="card log-card">
+      <h2>事件 / 重试日志</h2>
+      <div id="log" class="log"></div>
+    </section>
+  </main>
+
+  <script type="module" src="./src/ui.js"></script>
+</body>
+</html>
