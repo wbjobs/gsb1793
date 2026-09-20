@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>分块并发下载器</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <h1>分块并发下载器</h1>
+        <p class="sub">Fetch + Streams + IndexedDB + Web Worker · 断点续传 · 全局令牌桶限速 · 自动重试</p>
+      </header>
+
+      <section class="controls">
+        <div class="field grow">
+          <label for="urls">下载地址（每行一个，可写为 <code>文件名 URL</code>）</label>
+          <textarea id="urls" rows="4" placeholder="demo-64mb.bin
+https://example.com/large-file.iso"></textarea>
+        </div>
+        <div class="field row">
+          <div>
+            <label for="concurrency">并发分块数</label>
+            <input id="concurrency" type="number" min="1" max="16" value="3" />
+          </div>
+          <div>
+            <label for="rate">限速 KB/s（0 = 不限）</label>
+            <input id="rate" type="number" min="0" step="64" value="0" />
+          </div>
+          <div class="actions">
+            <button id="add" class="primary">添加并下载</button>
+            <button id="pause-all">全部暂停</button>
+            <button id="resume-all">全部恢复</button>
+          </div>
+        </div>
+        <div class="hint">
+          <span id="global-speed">总速度 —</span>
+          <span class="muted">分块大小 4MB · 断网或暂停后恢复只重传未完成分块 · 数据存于 IndexedDB</span>
+        </div>
+      </section>
+
+      <section>
+        <ul id="file-list" class="file-list"></ul>
+        <p id="empty-tip" class="muted center">暂无下载任务</p>
+      </section>
+
+      <section class="help">
+        <h2>验收点验证方式</h2>
+        <ul>
+          <li><b>下载中断可续：</b>下载中点“暂停”或直接断网，再点“恢复”，进度不回退、不重复下载已完成分块。</li>
+          <li><b>并发数可控：</b>调整“并发分块数”立即生效，多个文件公平共享总并发。</li>
+          <li><b>限速准确：</b>设置 512 KB/s，总速度稳定收敛到设定值（允许初始 1 秒突发额度）。</li>
+          <li><b>1GB 不崩：</b>分块 Blob 落 IndexedDB，内存只保留在途分块；内置测试 <code>npm test</code> 用 1GB 虚拟文件验证。</li>
+          <li><b>异常自动重试：</b>测试服务器对 <code>?fail=N</code> 前 N 次请求返回 500，观察“重试 N”事件后自动成功。</li>
+        </ul>
+      </section>
+    </main>
+    <script type="module" src="./src/main/app.js"></script>
+  </body>
+</html>

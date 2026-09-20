@@ -1,0 +1,14 @@
+{
+  "name": "chunked-download-manager",
+  "version": "1.0.0",
+  "description": "多文件并发分块下载器：Range 分块、暂停恢复、限速、断点续传、自动重试（Fetch + Streams + IndexedDB + Web Worker）",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server/server.mjs",
+    "test": "node --test test/**/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
